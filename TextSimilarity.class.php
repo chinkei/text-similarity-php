@@ -1,19 +1,20 @@
 <?php
 /*
 *   文本相似度（余弦定理）
-*   
+*
 *   Author:宋小北（@xiaobeicn）
-*   
+*
 *   参考：
-*   http://www.ruanyifeng.com/blog/2013/03/cosine_similarity.html 
+*   http://www.ruanyifeng.com/blog/2013/03/cosine_similarity.html
 *       http://my.oschina.net/BreathL/blog/42477
-*   
+*
 *   Use:
 *   $obj = new TextSimilarity ($text1, $text2);
 *   echo $obj->run();
 */
 
-Class TextSimilarity {
+class TextSimilarity
+{
     /**
      * [排除的词语]
      *
@@ -72,22 +73,22 @@ Class TextSimilarity {
     private function analyse()
     {
         //t1
-        foreach($this->_segList1 as $v){
-            if( !in_array($v , $this->_excludeArr) ){
-                if( !array_key_exists($v , $this->_words) ){
+        foreach ($this->_segList1 as $v) {
+            if (!in_array($v, $this->_excludeArr)) {
+                if (!array_key_exists($v, $this->_words)) {
                     $this->_words[$v] = array(1 , 0);
-                }else{
+                } else {
                     $this->_words[$v][0] += 1;
                 }
             }
         }
         
         //t2
-        foreach($this->_segList2 as $v){
-            if( !in_array($v , $this->_excludeArr) ){
-                if( !array_key_exists($v , $this->_words) ){
+        foreach ($this->_segList2 as $v) {
+            if (!in_array($v, $this->_excludeArr)) {
+                if (!array_key_exists($v, $this->_words)) {
                     $this->_words[$v] = array(0 , 1);
-                }else{
+                } else {
                     $this->_words[$v][1] += 1;
                 }
             }
@@ -102,10 +103,10 @@ Class TextSimilarity {
     private function handle()
     {
         $sum = $sumT1 = $sumT2 = 0;
-        foreach($this->_words as $word){
+        foreach ($this->_words as $word) {
             $sum    += $word[0] * $word[1];
-            $sumT1  += pow($word[0],2);
-            $sumT2  += pow($word[1],2);
+            $sumT1  += pow($word[0], 2);
+            $sumT2  += pow($word[1], 2);
         }
         
         $rate = $sum / (sqrt($sumT1 * $sumT2));
@@ -132,8 +133,8 @@ Class TextSimilarity {
         $so->send_text($text);
         
         //便利出需要的数组
-        while($res = $so->get_result()){
-            foreach($res as $v){
+        while ($res = $so->get_result()) {
+            foreach ($res as $v) {
                 $outText[] = isset($v['word']) ? strtoupper($v['word']) : "";
             }
         }
@@ -142,5 +143,4 @@ Class TextSimilarity {
         
         return $outText;
     }
-    
 }
